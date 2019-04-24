@@ -333,12 +333,33 @@ $(document).ready(function () {
             });
     });
 
-    // Travel warnings click handler
-    // https://fixer.io/quickstart
-    $('#getTravelWarnings').on("click", function () {
+    // Country info click handler
+    $('#getCountryInfo').on("click", function () {
 
         // Here we are building the URL we need to query the database
-        var queryURL = "https://www.travel-advisory.info/api?countrycode=AU";
+        var queryURL = "https://www.state.gov/api/v1/?command=get_country_fact_sheets&fields=title,terms,full_html&terms=italy:any,yemen:any";
+
+        // Here we run our AJAX call to the OpenWeatherMap API
+        $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+            // We store all of the retrieved data inside of an object called "response"
+            .then(function (response) {
+
+                $("#modalText").html(response.country_fact_sheets[0].full_html);
+                $("#moreInfoModalTitle").text("Country Info");
+
+            });
+    });
+
+    // Travel advisory click handler
+    $('#getTravelAdvisory').on("click", function () {
+
+        console.log("TA")
+
+        // Here we are building the URL we need to query the database
+        var queryURL = "https://travel.state.gov/_res/rss/TAsTWs.xml";
 
         // Here we run our AJAX call to the OpenWeatherMap API
         $.ajax({
@@ -354,16 +375,9 @@ $(document).ready(function () {
                 // Log the resulting object
                 console.log(response);
 
-                var jsonString = JSON.stringify(response);
-                var jsonPretty = JSON.stringify(JSON.parse(jsonString), null, 2);
-                console.log(jsonPretty);
-                var preElem = $("<pre>");
-                preElem.html(jsonPretty);
-                $("#modalText").html(preElem);
+                $("#modalText").html(response);
                 $("#moreInfoModalTitle").text("Travel Advisory");
             });
     });
-
-    // https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Rome+Italy&format=jsonfm
 
 });
