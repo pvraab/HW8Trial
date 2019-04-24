@@ -31,6 +31,72 @@
       <h3 class="text-center">Plan your next trip</h3>
     </div>
 
+    <!-- Enter a user -->
+    <div class="row">
+      <div class="col-md-12">
+
+        <!-- Add user  -->
+        <div class="card mb-4">
+          <div class="card-header">Add user</div>
+          <div class="card-body">
+
+            <!-- Entry Form -->
+            <form>
+              <div class="form-group">
+                <label for="user-input">Name</label>
+                <input class="form-control" id="user-input" placeholder="Jane Doe" type="text">
+              </div>
+              <div class="form-group">
+                <label for="location-input">Location (City, State, Country)</label>
+                <input class="form-control" id="location-input" placeholder="Denver, CO, USA" type="text">
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" id="email-input" placeholder="jane@gmail.com" type="text">
+              </div>
+              <div class="form-group">
+                <label for="phone-input">Phone</label>
+                <input class="form-control" id="phone-input" placeholder="555-555-5555" type="text">
+              </div>
+              <div class="form-group">
+                <label for="emergency-contact-input">Emergency Contact</label>
+                <input class="form-control" id="emergency-contact-input" placeholder="555-555-5555" type="text">
+              </div>
+              <button class="btn btn-primary float-right" id="add-user-btn">Submit</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table of current users -->
+    <div class="row">
+
+      <div class="col-md-12">
+
+        <!-- Current Users-->
+        <div class="card mb-4">
+          <div class="card-header">Current Users</div>
+          <div class="card-body">
+            <table class="table table-sm table-hover" id='user-table'>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Emergency Contact</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Form to enter trip info -->
     <div class="container">
       <div class="row">
@@ -62,24 +128,29 @@
                 <button class="btn btn-primary float-right" id="add-trip-btn">Submit</button>
               </form>
 
-
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Show flight info -->
+      <!-- Show buttons to get API info -->
       <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal" id="getFlights">Flights</button>
-            <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal" id="getWeather">Weather</button>
-            <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal" id="getCurrencyExchange">Currency Exchange</button>
-            <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal" id="getYelp">Yelp Reviews</button>
-            <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal" id="getTravelWarnings">Travel Warnings</button>
-          </div>
+          <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal"
+            id="getFlights">Flights</button>
+          <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal"
+            id="getWeather">Weather</button>
+          <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal"
+            id="getCurrencyExchange">Currency Exchange</button>
+          <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal" id="getYelp">Yelp
+            Reviews</button>
+          <button class="btn btn-primary float-left" data-toggle="modal" data-target="#moreInfoModal"
+            id="getTravelWarnings">Travel Warnings</button>
+        </div>
       </div>
     </div>
 
+    <!-- Table of current trips -->
     <div class="row">
 
       <div class="col-md-12">
@@ -102,39 +173,6 @@
               <tbody>
               </tbody>
             </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <!-- Add trip  -->
-        <div class="card mb-4">
-          <div class="card-header">Add trip</div>
-          <div class="card-body">
-
-            <!-- Entry Form -->
-            <form>
-              <div class="form-group">
-                <label for="employee-name-input">Employee Name</label>
-                <input class="form-control" id="employee-name-input" placeholder="Jane Doe" type="text">
-              </div>
-              <div class="form-group">
-                <label for="role-input">Role</label>
-                <input class="form-control" id="role-input" placeholder="CEO" type="text">
-              </div>
-              <div class="form-group">
-                <label for="start-input">Start Date (MM/DD/YYYY)</label>
-                <input class="form-control" id="start-input" placeholder="01/08/1989" type="text">
-              </div>
-              <div class="form-group">
-                <label for="rate-input">Monthly Rate</label>
-                <input class="form-control" id="rate-input" placeholder="200000" type="text">
-              </div>
-              <button class="btn btn-primary float-right" id="add-employee-btn">Submit</button>
-            </form>
-
           </div>
         </div>
       </div>
