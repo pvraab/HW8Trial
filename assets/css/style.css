@@ -1,0 +1,21 @@
+#user-table th,
+td {
+    display: inline-block;
+    width: 16.575%;
+}
+
+#itinerary-table th,
+td {
+    display: inline-block;
+    width: 16.575%;
+}
+
+.my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
+}

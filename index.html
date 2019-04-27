@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Pack Your Bags</title>
+
+  <!-- Reset browsers to initial conditions -->
+  <link rel="stylesheet" href="./assets/css/reset.css">
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <!-- App style sheet -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+</head>
+
+<body>
+
+  <!-- Pack Your Bags -->
+  <div class="container">
+
+    <!-- Jumbotron -->
+    <div class="jumbotron" style="background-color: black; color: white">
+      <h1 class="text-center">Pack Your Bags</h1>
+      <br>
+      <h4 class="text-center">Create an Exciting Itinerary</h4>
+      <br>
+      <h6 class="text-center">“It's a dangerous business, Frodo, going out your door. 
+        You step onto the road, and if you don't keep your feet, 
+        there's no knowing where you might be swept off to.” - Bilbo Baggins</h6>
+    </div>
+
+    <!-- Enter a user/trip -->
+    <div class="row">
+      <div class="col-md-12">
+
+        <!-- Add user  -->
+        <div class="card mb-4">
+          <div class="card-header">Add user/trip information</div>
+          <div class="card-body">
+
+            <!-- Entry Form -->
+            <form>
+              <div class="form-group">
+                <label for="user-input">Name</label>
+                <input class="form-control" id="user-input" placeholder="Jane Doe" type="text">
+              </div>
+              <div class="form-group">
+                <label for="location-input">Location (City, State, Country)</label>
+                <input class="form-control" id="location-input" placeholder="Denver, CO, USA" type="text">
+              </div>
+              <div class="form-group">
+                <label for="destination-input">Destination</label>
+                <input class="form-control" id="destination-input" placeholder="Rome, Italy" type="text">
+              </div>
+              <div class="form-group">
+                <label for="start-input">Start Date (MM/DD/YYYY)</label>
+                <input class="form-control" id="start-input" placeholder="01/08/1989" type="text">
+              </div>
+              <div class="form-group">
+                <label for="end-input">End Date (MM/DD/YYYY)</label>
+                <input class="form-control" id="end-input" placeholder="01/08/1989" type="text">
+              </div>
+
+              <button class="btn btn-primary float-right" id="add-user-btn">Add User</button>
+              <button class="btn btn-primary float-right" id="add-itinerary-btn">Create Itinerary</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table of current itinerary -->
+    <div class="row">
+
+      <div class="col-md-12">
+
+        <!-- Current Itinerary-->
+        <div class="card mb-4">
+          <div class="card-header">Current Itinerary</div>
+          <div class="card-body">
+
+            <!-- How to scroll a table -->
+            <!-- https://mdbootstrap.com/docs/jquery/tables/scroll/ -->
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+              <table class="table table-lg table-hover" id='itinerary-table'>
+                <thead>
+                  <tr>
+                    <th scope="col">Day</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Where</th>
+                    <th scope="col">How</th>
+                    <th scope="col">What</th>
+                    <th scope="col">Contact</th>
+                  </tr>
+                </thead>
+                <tbody id="itinerary-table-tbody">
+                </tbody>
+              </table>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- Work on the itinerary -->
+        <div class="row">
+            <div class="col-md-12">
+      
+              <!-- Add user  -->
+              <div class="card mb-4">
+                <div class="card-header">Modify itinerary</div>
+                <div class="card-body">
+
+                    <h3 id="day"></h3>
+                    <h3 id="date"></h3>
+      
+                  <!-- Entry Form -->
+                  <form>
+                    <div class="form-group">
+                      <label for="where-input">Where Am I</label>
+                      <input class="form-control" id="where-input" placeholder="" type="text">
+                    </div>
+                    <div class="form-group">
+                      <label for="travel-input">Getting There</label>
+                      <input class="form-control" id="travel-input" placeholder="" type="text">
+                    </div>
+                    <div class="form-group">
+                      <label for="todo-input">What Am I Doing</label>
+                      <input class="form-control" id="todo-input" placeholder="" type="text">
+                    </div>
+                    <div class="form-group">
+                      <label for="contact-input">Contact Info</label>
+                      <input class="form-control" id="contact-input" placeholder="" type="text">
+                    </div>
+      
+                    <button class="btn btn-primary float-right" id="add-itinerary-btn">Save Itinerary</button>
+                  </form>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+      
+      
+
+    <!-- Modal dialog to display more information for a trip -->
+    <div class="modal fade" id="moreInfoModal" tabindex="-1" role="dialog" aria-labelledby="moreInfoModalTitle"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="moreInfoModalTitle">More Info</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modalText">
+            <p>Here</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <!-- Firebase Reference -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+  <!-- Moment.js Reference -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
+  <!-- JavaScript -->
+  <script src="./assets/javascript/app.js"></script>
+
+</body>
+
+</html>
