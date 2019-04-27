@@ -6,16 +6,7 @@
 // Key new functionality:
 // 
 // ToDo
-// Consider confirming user and itinerary updates/deletes
-// Error checking for fields entered
-//   Start date before end date
-//   Maybe set a limit on number of days we can handle
-//   Valid location and destination
-// Scroll table
-// Click on a row and populate itinerary day form
-// Get a row by Day key
-// How do we empty DB child
-// Create a PDF or other document of itinerary
+
 // Wait for document to finish loading
 $(document).ready(function () {
 
@@ -71,11 +62,10 @@ $(document).ready(function () {
 
     });
 
-    // Create Firebase event for adding user to the database 
-    // and a row in the html when a user adds an entry
+    // On value event get a user snapshot
+    // from the databaase. Then use that object to 
+    // create a user on the screen.
     userRef.on("value", function (snapshot) {
-        console.log("User ref on child added");
-        console.log(snapshot.val());
 
         // Store everything into a variable.
         var user = snapshot.val().user;
@@ -86,15 +76,10 @@ $(document).ready(function () {
 
         // Update screen
         $("#user-input").val(user);
-        console.log("Store " + user);
         $("#location-input").val(location);
-        console.log("Store " + location);
         $("#destination-input").val(destination);
-        console.log("Store " + destination);
         $("#start-input").val(startDate);
-        console.log("Store " + startDate);
         $("#end-input").val(endDate);
-        console.log("Store " + endDate);
 
     });
 
@@ -110,7 +95,7 @@ $(document).ready(function () {
 
     });
 
-    // Create a new itinerary
+    // Create a new itinerary and store it in the database
     function createItinerary(data) {
 
         // Empty table
@@ -128,9 +113,7 @@ $(document).ready(function () {
         var startDate = moment(data.val().startDate, "X");
         var endDate = moment(data.val().endDate, "X");
         var numberOfDays = endDate.diff(startDate, "days") + 1;
-        console.log("Days = " + numberOfDays);
         var thisDate = startDate;
-        console.log(thisDate);
 
         // Create number of days rows in itinerary and store in databasae
         for (var i = 1; i <= numberOfDays; i++) {
@@ -158,16 +141,19 @@ $(document).ready(function () {
 
             thisDate = thisDate.add(parseInt(1), "day");
 
-
         }
     }
 
-    // Create Firebase event for adding itinerary to the database 
-    // and a row in the html when a user adds an entry
+    // On child_added event get an itinerary childSnapshot
+    // from the databaase. Then use that object to 
+    // create a row in the #itineraryTable.
     itinRef.on("child_added", function (childSnapshot) {
 
-        console.log("Trip ref on child added");
-        console.log(childSnapshot.val());
+        // console.logconsole.log("Trip ref on child added");
+        // console.log(childSnapshot.val());
+
+        // Grab the key to iterate over the object
+        // console.log("Key " + childSnapshot.key);
 
         // Store everything into a variable.
         var day = childSnapshot.val().day;
@@ -193,209 +179,118 @@ $(document).ready(function () {
 
         // Put day key on row
         newRow.attr("data-index", day);
+        // console.log(newRow.attr("data-index"));
+        // console.log(newRow);
 
         // Append the new row to the table
         $("#itinerary-table > tbody").append(newRow);
     });
 
+    var currentKey = null;
+    var itineraryIndex = null;
+    var currentDay = null;
+    var currentDate = null;
+    var currentWhereAmI = null;
+    var currentHowTravel = null;
+    var currentWhatToDo = null;
+    var currentContact = null;
+
     // Handle clicks on itinerary 
-    $("#itinerary-table").on("click", function() {
+    // Use delegate function to get row clicked on
+    // http://api.jquery.com/delegate/
+    $("#itinerary-table tbody").delegate("tr", "click", function (e) {
+
         console.log("Click on table");
         console.log($(this));
-        var index = $(this).attr("data-index");
-        console.log("Row number = " + index);
-    });
 
-    // Flights button click handler
-    $('#getFlights').on("click", function () {
+        // Get data-index attribute to get day of itinerary
+        itineraryIndex = $(this).attr("data-index");
+        console.log("Row number = " + itineraryIndex);
 
-        // Constructing a URL to search flights
-        queryURL = "https://api.skypicker.com/flights?flyFrom=DEN&to=LGW&dateFrom=01/05/2019&dateTo=03/05/2019&partner=picky";
+        // Get the row from the DB
+        itinRef.orderByChild("day").equalTo(itineraryIndex).on("child_added", function (snapshot) {
+            console.log(snapshot.key + " was " + snapshot.val().day + " day");
 
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).then(function (response) {
+            // Save row key
+            currentKey = snapshot.key;
 
-            // // Successful query
-            // appData.isQueryOn = true;
+            currentDay = snapshot.val().day;
+            currentDate = snapshot.val().date;
+            currentWhereAmI = snapshot.val().whereAmI;
+            currentHowTravel = snapshot.val().howTravel;
+            currentWhatToDo = snapshot.val().whatToDo;
+            currentContact = snapshot.val().contact;
 
-            // Store the response
-            // appData.gifData.push(response);
+            // Update screen
+            $("#where-input").val(currentWhereAmI);
+            $("#travel-input").val(currentHowTravel);
+            $("#todo-input").val(currentWhatToDo);
+            $("#contact-input").val(currentContact);
 
-            // Storing an array of results in the results variable
-            var results = response.data;
-            console.log(response);
-
-
-            var jsonString = JSON.stringify(results);
-            var jsonPretty = JSON.stringify(JSON.parse(jsonString), null, 2);
-            console.log(jsonPretty);
-            var preElem = $("<pre>");
-            preElem.html(jsonPretty);
-            $("#modalText").html(preElem);
-            $("#moreInfoModalTitle").text("Flights");
         });
+
     });
 
-    // Weather button click handler
-    $('#getWeather').on("click", function () {
+    // Update itinerary on #update-user-btn button click
+    $("#update-itinerary-btn").on("click", function (event) {
 
-        // This is our API key
-        var APIKey = "166a433c57516f51dfab1f7edaed8413";
+        console.log("Update itinerary");
 
-        // Here we are building the URL we need to query the database
-        var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
-            "q=Denver, CO, USA&units=imperial&appid=" + APIKey;
+        // Prevent default form action
+        event.preventDefault();
 
-        // Here we run our AJAX call to the OpenWeatherMap API
-        $.ajax({
-                url: queryURL,
-                method: "GET"
-            })
-            // We store all of the retrieved data inside of an object called "response"
-            .then(function (response) {
+        // Create data
+        var day = currentDay;
+        var thisDate = currentDate;
+        var whereAmI = $("#where-input").val();
+        var howTravel = $("#travel-input").val();
+        var whatToDo = $("#todo-input").val();
+        var contact = $("#contact-input").val();
 
-                // Log the queryURL
-                console.log(queryURL);
+        // Creates local "temporary" object for holding itinerary data
+        var newUpdateRow = {
+            day: day,
+            thisDate: thisDate,
+            whereAmI: whereAmI,
+            howTravel: howTravel,
+            whatToDo: whatToDo,
+            contact: contact
+        };
 
-                // Log the resulting object
-                console.log(response);
+        // Update
+        // itinRef.update(newUser);
+        // itinRef(currentKey).update({whereAmI: whereAmI});
+        database.ref("itinerary/"+currentKey+"/whereAmI").set(whereAmI);
+        // itinRef.orderByChild("day").equalTo(itineraryIndex).update({whereAmI: whereAmI});
 
-                // // Transfer content to HTML
-                // $(".city").html("<h1>" + response.name + " Weather Details</h1>");
-                // $(".wind").text("Wind Speed: " + response.wind.speed);
-                // $(".humidity").text("Humidity: " + response.main.humidity);
-                // $(".temp").text("Temperature (F) " + response.main.temp);
+        // var iVal = itinRef.child(currentKey+1);
+        // console.log("Get by key one");
+        // console.log(iVal);
+        // var iVal = itinRef.child(currentKey).child("whereAmI1");
+        // console.log("Get by key two");
+        // console.log(iVal);
+        // // var iVal = itinRef.child(currentKey).child("whereAmI").setValue(whereAmI)
 
-                // // Log the data in the console as well
-                // console.log("Wind Speed: " + response.wind.speed);
-                // console.log("Humidity: " + response.main.humidity);
-                // console.log("Temperature (F): " + response.main.temp);
+        // Get the row from the DB
+        itinRef.orderByChild("day").equalTo(itineraryIndex).on("child_added", function (snapshot) {
+            console.log(snapshot.key + " was " + snapshot.val().day + " day");
 
-                var jsonString = JSON.stringify(response);
-                var jsonPretty = JSON.stringify(JSON.parse(jsonString), null, 2);
-                console.log(jsonPretty);
-                var preElem = $("<pre>");
-                preElem.html(jsonPretty);
-                $("#modalText").html(preElem);
-                $("#moreInfoModalTitle").text("Weather");
-            });
+            // Save row key
+            currentKey = snapshot.key;
+
+            // Update screen
+            $("#where-input").val(snapshot.val().whereAmI);
+            $("#travel-input").val(snapshot.val().howTravel);
+            $("#todo-input").val(snapshot.val().whatToDo);
+            $("#contact-input").val(snapshot.val().contact);
+
+        });
+
     });
 
-    // Currency exchange button click handler
-    // https://fixer.io/quickstart
-    $('#getCurrencyExchange').on("click", function () {
+    // Update itinerary d and store it in the database
+    function updateItinerary(data) {}
 
-        // This is our API key
-        var APIKey = "2363396842cbd6f647b46f205c08efff";
 
-        // Here we are building the URL we need to query the database
-        var queryURL = "http://data.fixer.io/api/latest?access_key=2363396842cbd6f647b46f205c08efff&symbols=USD,AUD,CAD,PLN,MXN&format=1";
-
-        // Here we run our AJAX call to the OpenWeatherMap API
-        $.ajax({
-                url: queryURL,
-                method: "GET"
-            })
-            // We store all of the retrieved data inside of an object called "response"
-            .then(function (response) {
-
-                // Log the queryURL
-                console.log(queryURL);
-
-                // Log the resulting object
-                console.log(response);
-
-                var jsonString = JSON.stringify(response);
-                var jsonPretty = JSON.stringify(JSON.parse(jsonString), null, 2);
-                console.log(jsonPretty);
-                var preElem = $("<pre>");
-                preElem.html(jsonPretty);
-                $("#modalText").html(preElem);
-                $("#moreInfoModalTitle").text("Currency Exchange");
-            });
-    });
-
-    // Yelp button click handler
-    // https://fixer.io/quickstart
-    $('#getYelp').on("click", function () {
-
-        // This is our API key
-        var APIKey = "2363396842cbd6f647b46f205c08efff";
-
-        // Here we are building the URL we need to query the database
-        var queryURL = "http://data.fixer.io/api/latest?access_key=2363396842cbd6f647b46f205c08efff&symbols=USD,AUD,CAD,PLN,MXN&format=1";
-
-        // Here we run our AJAX call to the OpenWeatherMap API
-        $.ajax({
-                url: queryURL,
-                method: "GET"
-            })
-            // We store all of the retrieved data inside of an object called "response"
-            .then(function (response) {
-
-                // Log the queryURL
-                console.log(queryURL);
-
-                // Log the resulting object
-                console.log(response);
-
-                var jsonString = JSON.stringify(response);
-                var jsonPretty = JSON.stringify(JSON.parse(jsonString), null, 2);
-                console.log(jsonPretty);
-                var preElem = $("<pre>");
-                preElem.html(jsonPretty);
-                $("#modalText").html(preElem);
-                $("#moreInfoModalTitle").text("Yelp");
-            });
-    });
-
-    // Country info click handler
-    $('#getCountryInfo').on("click", function () {
-
-        // Here we are building the URL we need to query the database
-        var queryURL = "https://www.state.gov/api/v1/?command=get_country_fact_sheets&fields=title,terms,full_html&terms=italy:any,yemen:any";
-
-        // Here we run our AJAX call to the OpenWeatherMap API
-        $.ajax({
-                url: queryURL,
-                method: "GET"
-            })
-            // We store all of the retrieved data inside of an object called "response"
-            .then(function (response) {
-
-                $("#modalText").html(response.country_fact_sheets[0].full_html);
-                $("#moreInfoModalTitle").text("Country Info");
-
-            });
-    });
-
-    // Travel advisory click handler
-    $('#getTravelAdvisory').on("click", function () {
-
-        console.log("TA")
-
-        // Here we are building the URL we need to query the database
-        var queryURL = "https://travel.state.gov/_res/rss/TAsTWs.xml";
-
-        // Here we run our AJAX call to the OpenWeatherMap API
-        $.ajax({
-                url: queryURL,
-                method: "GET"
-            })
-            // We store all of the retrieved data inside of an object called "response"
-            .then(function (response) {
-
-                // Log the queryURL
-                console.log(queryURL);
-
-                // Log the resulting object
-                console.log(response);
-
-                $("#modalText").html(response);
-                $("#moreInfoModalTitle").text("Travel Advisory");
-            });
-    });
 
 });

@@ -1,3 +1,8 @@
+<!-- Homework #8 -->
+<!-- Team #4 -->
+<!-- 4/24/2019 -->
+<!-- Project #1 - Pack  Your Bags -->
+
 <!DOCTYPE html>
 
 <html lang="en-us">
@@ -31,8 +36,8 @@
       <br>
       <h4 class="text-center">Create an Exciting Itinerary</h4>
       <br>
-      <h6 class="text-center">“It's a dangerous business, Frodo, going out your door. 
-        You step onto the road, and if you don't keep your feet, 
+      <h6 class="text-center">“It's a dangerous business, Frodo, going out your door.
+        You step onto the road, and if you don't keep your feet,
         there's no knowing where you might be swept off to.” - Bilbo Baggins</h6>
     </div>
 
@@ -59,17 +64,21 @@
                 <label for="destination-input">Destination</label>
                 <input class="form-control" id="destination-input" placeholder="Rome, Italy" type="text">
               </div>
+
+              <!-- DatePicker -->
+              <!-- https://stackoverflow.com/questions/26956646/javascript-how-do-i-make-a-calendar-selection -->
               <div class="form-group">
                 <label for="start-input">Start Date (MM/DD/YYYY)</label>
                 <input class="form-control" id="start-input" placeholder="01/08/1989" type="text">
+                <input type="date" name="date" class="datepicker">
               </div>
               <div class="form-group">
                 <label for="end-input">End Date (MM/DD/YYYY)</label>
                 <input class="form-control" id="end-input" placeholder="01/08/1989" type="text">
               </div>
 
-              <button class="btn btn-primary float-right" id="add-user-btn">Add User</button>
-              <button class="btn btn-primary float-right" id="add-itinerary-btn">Create Itinerary</button>
+              <button class="btn btn-primary float-right" id="add-user-btn">Add/Update User</button>
+              <button class="btn btn-primary float-right" id="add-itinerary-btn">Create New Itinerary</button>
             </form>
 
           </div>
@@ -113,46 +122,45 @@
       </div>
     </div>
 
-        <!-- Work on the itinerary -->
-        <div class="row">
-            <div class="col-md-12">
-      
-              <!-- Add user  -->
-              <div class="card mb-4">
-                <div class="card-header">Modify itinerary</div>
-                <div class="card-body">
+    <!-- Work on the itinerary -->
+    <div class="row">
+      <div class="col-md-12">
 
-                    <h3 id="day"></h3>
-                    <h3 id="date"></h3>
-      
-                  <!-- Entry Form -->
-                  <form>
-                    <div class="form-group">
-                      <label for="where-input">Where Am I</label>
-                      <input class="form-control" id="where-input" placeholder="" type="text">
-                    </div>
-                    <div class="form-group">
-                      <label for="travel-input">Getting There</label>
-                      <input class="form-control" id="travel-input" placeholder="" type="text">
-                    </div>
-                    <div class="form-group">
-                      <label for="todo-input">What Am I Doing</label>
-                      <input class="form-control" id="todo-input" placeholder="" type="text">
-                    </div>
-                    <div class="form-group">
-                      <label for="contact-input">Contact Info</label>
-                      <input class="form-control" id="contact-input" placeholder="" type="text">
-                    </div>
-      
-                    <button class="btn btn-primary float-right" id="add-itinerary-btn">Save Itinerary</button>
-                  </form>
-      
-                </div>
+        <!-- Add user  -->
+        <div class="card mb-4">
+          <div class="card-header">Modify itinerary</div>
+          <div class="card-body">
+
+            <h3 id="day"></h3>
+            <h3 id="date"></h3>
+
+            <!-- Entry Form -->
+            <form>
+              <div class="form-group">
+                <label for="where-input">Where Am I</label>
+                <input class="form-control" id="where-input" placeholder="" type="text">
               </div>
-            </div>
+              <div class="form-group">
+                <label for="travel-input">Getting There</label>
+                <input class="form-control" id="travel-input" placeholder="" type="text">
+              </div>
+              <div class="form-group">
+                <label for="todo-input">What Am I Doing</label>
+                <input class="form-control" id="todo-input" placeholder="" type="text">
+              </div>
+              <div class="form-group">
+                <label for="contact-input">Contact Info</label>
+                <input class="form-control" id="contact-input" placeholder="" type="text">
+              </div>
+              <button class="btn btn-primary float-right" id="update-itinerary-btn">Save Itinerary</button>
+            </form>
+
           </div>
-      
-      
+        </div>
+      </div>
+    </div>
+
+
 
     <!-- Modal dialog to display more information for a trip -->
     <div class="modal fade" id="moreInfoModal" tabindex="-1" role="dialog" aria-labelledby="moreInfoModalTitle"
